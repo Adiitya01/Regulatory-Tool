@@ -103,25 +103,27 @@ class PipelineCompletionStatus(BaseModel):
 # ==================== Helper Functions ====================
 
 def get_file_info(filename: str, guideline_id: str = "iso11135") -> FileInfo:
-    """Get information about a file - check guideline-specific outputs directory"""
-    # Determine which config to use based on guideline_id
-    if guideline_id == "iso11135":
-        config = iso11135_config
-    else:
-        # Default to iso11135 for now
-        config = iso11135_config
-    
-    # Check guideline-specific outputs directory
-    file_path = config.OUTPUTS_DIR / filename
-    
-    if file_path.exists():
-        stat = file_path.stat()
-        return FileInfo(
-            filename=filename,
-            exists=True,
-            size=stat.st_size,
-            modified=datetime.fromtimestamp(stat.st_mtime).isoformat()
-        )
+    """Get information about a file - check local and cloud storage"""
+    # 1. Check if file exists (Local or Cloud)
+    if storage.exists(filename):
+        # If cloud, we don't necessarily have local stat
+        local_path = iso11135_config.OUTPUTS_DIR / filename
+        if local_path.exists():
+            stat = local_path.stat()
+            return FileInfo(
+                filename=filename,
+                exists=True,
+                size=stat.st_size,
+                modified=datetime.fromtimestamp(stat.st_mtime).isoformat()
+            )
+        else:
+            # Cloud exists, but no local details
+            return FileInfo(
+                filename=filename,
+                exists=True,
+                size=0,
+                modified=datetime.now().isoformat()
+            )
     return FileInfo(filename=filename, exists=False)
 
 # ==================== API Endpoints ====================

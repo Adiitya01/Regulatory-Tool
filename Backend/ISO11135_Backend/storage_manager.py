@@ -105,5 +105,18 @@ class StorageManager:
             return str(local_path)
         return None
 
+    def exists(self, filename: str) -> bool:
+        """Check if a file exists in the storage provider"""
+        if self.provider == "supabase" and self.client:
+            try:
+                # list files in bucket
+                files = self.client.storage.from_(self.bucket_name).list()
+                return any(f['name'] == filename for f in files)
+            except Exception as e:
+                logger.error(f"Error checking file existence in Supabase: {e}")
+                return False
+        
+        return (config.OUTPUTS_DIR / filename).exists()
+
 # Singleton instance
 storage = StorageManager()
