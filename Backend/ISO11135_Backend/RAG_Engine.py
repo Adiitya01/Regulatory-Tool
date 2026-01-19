@@ -6,6 +6,7 @@ import chromadb
 from typing import List, Dict, Any, Optional
 from pathlib import Path
 from . import config
+from .storage_manager import storage
 
 # Setup logging
 logger = logging.getLogger(__name__)
@@ -71,9 +72,9 @@ class LightweightRAGEngine:
 
     def _ingest_standard(self):
         """Ingest the Polished Regulatory Guidance (The Rules)"""
-        file_path = config.OUTPUTS_DIR / config.POLISHED_OUTPUT_FILE
-        if not file_path.exists():
-            logger.warning(f"Standard file not found: {file_path}")
+        file_path = storage.ensure_local(config.POLISHED_OUTPUT_FILE)
+        if not file_path:
+            logger.warning(f"Standard file not found in local or cloud: {config.POLISHED_OUTPUT_FILE}")
             return
 
         content = file_path.read_text(encoding="utf-8")
@@ -115,9 +116,9 @@ class LightweightRAGEngine:
 
     def _ingest_evidence(self):
         """Ingest extracted DHF data and Validation Reports (The Facts)"""
-        report_path = config.OUTPUTS_DIR / config.VALIDATION_REPORT
-        if not report_path.exists():
-            logger.warning(f"Validation report not found: {report_path}")
+        report_path = storage.ensure_local(config.VALIDATION_REPORT)
+        if not report_path:
+            logger.warning(f"Validation report not found in local or cloud: {config.VALIDATION_REPORT}")
             return
             
         content = report_path.read_text(encoding="utf-8")

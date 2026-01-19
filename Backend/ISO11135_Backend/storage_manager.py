@@ -118,5 +118,45 @@ class StorageManager:
         
         return (config.OUTPUTS_DIR / filename).exists()
 
+    def fetch_file_content(self, filename: str) -> Optional[str]:
+        """Fetch file content as string (from local or cloud)"""
+        # Try local first
+        local_path = config.OUTPUTS_DIR / filename
+        if local_path.exists():
+            try:
+                with open(local_path, 'r', encoding='utf-8') as f:
+                    return f.read()
+            except Exception:
+                pass
+
+        # Try Cloud
+        if self.provider == "supabase" and self.client:
+            try:
+                response = self.client.storage.from_(self.bucket_name).download(filename)
+                return response.decode('utf-8')
+            except Exception as e:
+                logger.error(f"Error fetching file from Supabase: {e}")
+        
+        return None
+
+    def ensure_local(self, filename: str) -> Optional[Path]:
+        """Ensure file exists locally, downloading from cloud if necessary"""
+        local_path = config.OUTPUTS_DIR / filename
+        if local_path.exists():
+            return local_path
+        
+        if self.provider == "supabase" and self.client:
+            try:
+                logger.info(f"☁️ Downloading {filename} from Supabase for local processing...")
+                response = self.client.storage.from_(self.bucket_name).download(filename)
+                local_path.parent.mkdir(parents=True, exist_ok=True)
+                with open(local_path, "wb") as f:
+                    f.write(response)
+                return local_path
+            except Exception as e:
+                logger.error(f"Error downloading from Supabase: {e}")
+        
+        return None
+
 # Singleton instance
 storage = StorageManager()

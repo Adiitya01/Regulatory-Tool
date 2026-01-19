@@ -320,9 +320,9 @@ async def upload_guideline(file: UploadFile = File(...)):
 async def polish_guideline():
     """Polish extracted guideline content using LLM"""
     try:
-        # Check if guideline extraction exists
-        guideline_file = iso11135_config.OUTPUTS_DIR / iso11135_config.GUIDELINE_EXTRACTION_OUTPUT
-        if not guideline_file.exists():
+        # Check if guideline extraction exists (Local or Cloud)
+        guideline_file = storage.ensure_local(iso11135_config.GUIDELINE_EXTRACTION_OUTPUT)
+        if not guideline_file:
             raise HTTPException(
                 status_code=400, 
                 detail="Guideline extraction not found. Please upload and extract guideline first."
@@ -415,17 +415,17 @@ async def upload_dhf(file: UploadFile = File(...)):
 async def run_validation():
     """Run validation analysis"""
     try:
-        # Check prerequisites
-        polished_file = iso11135_config.OUTPUTS_DIR / iso11135_config.POLISHED_OUTPUT_FILE
-        dhf_file = iso11135_config.OUTPUTS_DIR / iso11135_config.DHF_EXTRACTION_OUTPUT
+        # Check prerequisites (Local or Cloud)
+        polished_file = storage.ensure_local(iso11135_config.POLISHED_OUTPUT_FILE)
+        dhf_file = storage.ensure_local(iso11135_config.DHF_EXTRACTION_OUTPUT)
         
-        if not polished_file.exists():
+        if not polished_file:
             raise HTTPException(
                 status_code=400,
                 detail="Polished guideline not found. Please complete guideline polishing first."
             )
         
-        if not dhf_file.exists():
+        if not dhf_file:
             raise HTTPException(
                 status_code=400,
                 detail="DHF extraction not found. Please upload and extract DHF first."
@@ -583,30 +583,16 @@ async def get_file_content(filename: str):
     if filename not in allowed_files:
         raise HTTPException(status_code=403, detail="File not allowed")
     
-    # Check Backend/outputs first
-    file_path = iso11135_config.OUTPUTS_DIR / filename
+    content = storage.fetch_file_content(filename)
     
-    # If not found, check root/outputs
-    if not file_path.exists():
-        root_outputs = iso11135_config.PROJECT_ROOT.parent / "outputs" / filename
-        if root_outputs.exists():
-            file_path = root_outputs
-    
-    if not file_path.exists():
+    if content is None:
         raise HTTPException(status_code=404, detail="File not found")
     
-    try:
-        with open(file_path, 'r', encoding='utf-8') as f:
-            content = f.read()
-        
-        return {
-            "filename": filename,
-            "content": content,
-            "size": len(content)
-        }
-    except Exception as e:
-        logger.exception(f"Error reading file: {e}")
-        raise HTTPException(status_code=500, detail=f"Error reading file: {str(e)}")
+    return {
+        "filename": filename,
+        "content": content,
+        "size": len(content)
+    }
 
 @app.post("/api/pipeline/run")
 async def run_full_pipeline(
