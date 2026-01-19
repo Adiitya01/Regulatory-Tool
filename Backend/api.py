@@ -168,6 +168,28 @@ async def check_llm_status():
             message=f"Error: {str(e)}"
         )
 
+@app.get("/api/storage/test")
+async def test_storage_connection():
+    """Diagnostic endpoint for storage"""
+    try:
+        if storage.provider == "local":
+            return {"status": "local", "path": str(iso11135_config.OUTPUTS_DIR)}
+        
+        if not storage.client:
+             return {"status": "error", "message": "Supabase client not initialized"}
+
+        # Test Supabase
+        files = storage.client.storage.from_(storage.bucket_name).list()
+        return {
+            "status": "supabase",
+            "bucket": storage.bucket_name,
+            "file_count": len(files),
+            "files": [f['name'] for f in files]
+        }
+    except Exception as e:
+        logger.error(f"Storage test failed: {e}")
+        return {"status": "error", "message": str(e)}
+
 @app.get("/api/files/status")
 async def get_files_status(guideline_id: str = "iso11135"):
     """Get status of all output files for a specific guideline"""

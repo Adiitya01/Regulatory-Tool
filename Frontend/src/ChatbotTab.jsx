@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 
 const BASE_URL = import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:8000' : '');
-const API_BASE_URL = BASE_URL.endsWith('/api') ? BASE_URL : `${BASE_URL}/api`;
+const API_BASE_URL = (BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL) + '/api';
 
 function ChatbotTab({ filesStatus }) {
     const [messages, setMessages] = useState([])

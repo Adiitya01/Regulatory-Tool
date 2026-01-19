@@ -4,7 +4,9 @@ import './App.css'
 import ChatbotTab from './ChatbotTab'
 
 const BASE_URL = import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:8000' : '');
-const API_BASE_URL = BASE_URL.endsWith('/api') ? BASE_URL : `${BASE_URL}/api`;
+const API_BASE_URL = (BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL) + '/api';
+
+console.log('Using API Base URL:', API_BASE_URL);
 
 function App() {
   const [mainTab, setMainTab] = useState('processing')
