@@ -1,0 +1,56 @@
+:root {
+    /* Corporate Modern Palette - Sampled from Ethosh Logo */
+    --primary: #2B3990;
+    /* Brand Blue */
+    --primary-hover: #1E2B7A;
+    --secondary: #39B549;
+    /* Brand Green */
+    --secondary-hover: #2E933B;
+
+    --bg: #F8FAFC;
+    /* Light Slate Background */
+    --card-bg: #FFFFFF;
+    --text: #1E293B;
+    /* Slate 800 */
+    --text-muted: #64748B;
+    /* Slate 500 */
+
+    --sidebar-bg: #0F172A;
+    /* Deep Navy Sidebar */
+    --sidebar-text: #F8FAFC;
+    --sidebar-active: #2B3990;
+
+    --header-bg: #FFFFFF;
+    --header-text: #1E293B;
+
+    --success: #39B549;
+    /* Using Brand Green for success */
+    --warning: #F59E0B;
+    --error: #EF4444;
+
+    --border: #E2E8F0;
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+code {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+#root {
+    min-height: 100vh;
+}

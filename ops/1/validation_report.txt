@@ -1,0 +1,739 @@
+################################################################################
+#                                                                              #
+#                             DHF VALIDATION REPORT                            #
+#                                                                              #
+################################################################################
+
+Generated: 2025-12-03 10:57:23
+
+
+┌─ OVERALL READINESS ──────────────────────────────────────────────────────────
+│  DHF Readiness Score:  88.6%
+│  [████████████████████████████████████████████░░░░░░]
+└───────────────────────────────────────────────────────────────────────────────
+
+
+
+################################################################################
+# SECTION 1: PRODUCT REQUIREMENT
+#------------------------------------------------------------------------------
+# Readiness Score:  94.0%
+################################################################################
+
+┌─ ✅ Present (17 items) ───────────────────────────────────────────────────────────
+│
+│  [01] The sterilization process meets pre-determined specifications under Minimum And Maximum load Pattern conditions
+│      → Evidence: Context section, "at the process meets pre-determined specifications under Minimum And Maximum load...
+│
+│
+│  [02] A clear description of the sterilization validation strategies and protocols to be followed in accordance with ISO 11135
+│      → Evidence: │    2 Gas Exposure Page 29 of 45 Biorad Medisys Pvt. Ltd. Unauthorized Copying Prohibited --- │...
+│
+│
+│  [03] The scope of sterilization validation strategies for ethylene oxide sterilization of medical devices is documented
+│      → Evidence: Section 2.0 SCOPE | Context mentions "sterilization validation strategies" but does not provide furt...
+│
+│
+│  [04] ISO 11135 general compliance requirements apply as per Guideline Reference: General Requirements
+│      → Evidence: Requirements section
+│
+│
+│  [05] Context for validation includes meeting pre-determined specifications under Minimum And Maximum load Pattern conditions, but includes clarity on what these conditions entail
+│      → Evidence: Context section, "at the process meets pre-determined specifications under Minimum And Maximum load...
+│
+│
+│  [06] Specific details on the half-cycle method (Overkill approach) eliminating bioburden on medical devices are present
+│      → Evidence: │ │  Context: │    at the process meets pre-determined specifications under Minimum And Maximum load...
+│
+│
+│  [07] Information on sterilization validation strategies beyond ISO 11135 compliance is present
+│      → Evidence: │    2 Gas Exposure Page 29 of 45 Biorad Medisys Pvt. Ltd. Unauthorized Copying Prohibited --- │...
+│
+│
+│  [08] Clarity on what constitutes "Minimum And Maximum load Pattern Revalidation" is present
+│      → Evidence: │ │  Context: │    at the process meets pre-determined specifications under Minimum And Maximum load...
+│
+│
+│  [09] Product requirement for sterilization validation
+│      → Evidence: ISO 11135 general compliance requirements apply | ISO 11135 general compliance requirements apply
+│
+│
+│  [10] A clear description of the sterilization validation strategies and protocols to be followed in accordance with ISO 11135
+│      → Evidence: │    2 Gas Exposure Page 29 of 45 Biorad Medisys Pvt. Ltd. Unauthorized Copying Prohibited --- │...
+│
+│
+│  [11] Specific details on the half-cycle method (Overkill approach) eliminating bioburden on medical devices are present
+│      → Evidence: │ │  Context: │    at the process meets pre-determined specifications under Minimum And Maximum load...
+│
+│
+│  [12] Information on sterilization validation strategies beyond ISO 11135 compliance is present
+│      → Evidence: │    2 Gas Exposure Page 29 of 45 Biorad Medisys Pvt. Ltd. Unauthorized Copying Prohibited --- │...
+│
+│
+│  [13] Clarity on what constitutes "Minimum And Maximum load Pattern Revalidation" is present
+│      → Evidence: │ │  Context: │    at the process meets pre-determined specifications under Minimum And Maximum load...
+│
+│
+│  [14] A clear description of the sterilization validation strategies and protocols to be followed in accordance with ISO 11135
+│      → Evidence: │    2 Gas Exposure Page 29 of 45 Biorad Medisys Pvt. Ltd. Unauthorized Copying Prohibited --- │...
+│
+│
+│  [15] Specific details on the half-cycle method (Overkill approach) eliminating bioburden on medical devices are present
+│      → Evidence: │ │  Context: │    at the process meets pre-determined specifications under Minimum And Maximum load...
+│
+│
+│  [16] Information on sterilization validation strategies beyond ISO 11135 compliance is present
+│      → Evidence: │    2 Gas Exposure Page 29 of 45 Biorad Medisys Pvt. Ltd. Unauthorized Copying Prohibited --- │...
+│
+│
+│  [17] Clarity on what constitutes "Minimum And Maximum load Pattern Revalidation" is present
+│      → Evidence: │ │  Context: │    at the process meets pre-determined specifications under Minimum And Maximum load...
+│
+└───────────────────────────────────────────────────────────────────────────────
+
+┌─ ⚠️ Partial/Needs Clarification (3 items) ───────────────────────────────────────
+│
+│  [01] The scope of Minimum And Maximum load Pattern Revalidation report does not explicitly mention the requirements from ISO 10993-7:2008 and ISO 11607-1:2019
+│      → Evidence: 3.0 REFERENCE DOCUMENTS section, which only mentions these standards but does not provide details on...
+│
+│
+│  [02] Responsibility and approval process are partially documented, but lack detail on specific roles and responsibilities
+│      → Evidence: Sections 4.0 RESPONSIBILITY and 4.2 Approver Regulatory Head
+│
+│
+│  [03] Numerical data is present but lacks context or relevance to the validation process
+│      → Evidence: Section Numerical Data with value "→ 2.0"
+│
+└───────────────────────────────────────────────────────────────────────────────
+
+
+################################################################################
+# SECTION 2: PROCESS VALIDATION
+#------------------------------------------------------------------------------
+# Readiness Score:  88.6%
+################################################################################
+
+┌─ ✅ Present (10 items) ───────────────────────────────────────────────────────────
+│
+│  [01] The sterilization process validation includes a minimum of three full cycles (full load and 25% load)
+│      → Evidence: "Three Full cycles of Minimum(25% load) and Maximum(full load) as per load pattern were carried out....
+│
+│
+│  [02] A clear description of the sampling method for bioburden determination is present, although it mentions that a sample selection was made for bioburden determination and sterility testing
+│      → Evidence: │    cycles of Minimum(25% load) and Maximum(full load) as per load pattern were carried out. │    T...
+│
+│
+│  [03] The sterilization process validation method is based on ISO 11135 general compliance requirements
+│      → Evidence: Guideline Reference: General Requirements, Requirements: ISO 11135 general compliance requirements a...
+│
+│
+│  [04] The sampling method for bioburden determination and sterility testing involves selecting one individual batch of family representative for each validation cycle
+│      → Evidence: Sampling method: One individual Batch of Family Representative is considered for each validation cyc...
+│
+│
+│  [05] The sterilization process includes exposure to different load patterns, including minimum (25% load), maximum (full load), and fractional cycle fractions
+│      → Evidence: Context: Fractional Cycle Fractional cycle of Minimum(25% load) as per load pattern were carried out
+│
+│
+│  [06] The duration of the half cycle for minimum load is 90 minutes, while the full cycle time is assumed to be 360 minutes for exposure
+│      → Evidence: Context: The duration of this half cycle was 90 minutes. The timing for this cycle was based on assu...
+│
+│
+│  [07] The sterilization process involves three cycles with different load patterns and durations, including fractional cycle fractions
+│      → Evidence: Context: Half Cycle Three Half cycles of Minimum(25% load) and Maximum(full load) as per load patter...
+│
+│
+│  [08] Cycle time for full cycle
+│      → Evidence: 360 minutes | The timing for this cycle was based on assuming that the full cycle time is 360 minute...
+│
+│
+│  [09] A clear description of the sampling method for bioburden determination is present, although it mentions that a sample selection was made for bioburden determination and sterility testing
+│      → Evidence: │    cycles of Minimum(25% load) and Maximum(full load) as per load pattern were carried out. │    T...
+│
+│
+│  [10] A clear description of the sampling method for bioburden determination is present, although it mentions that a sample selection was made for bioburden determination and sterility testing
+│      → Evidence: │    cycles of Minimum(25% load) and Maximum(full load) as per load pattern were carried out. │    T...
+│
+└───────────────────────────────────────────────────────────────────────────────
+
+┌─ ⚠️ Partial/Needs Clarification (4 items) ───────────────────────────────────────
+│
+│  [01] The sterilization process validation includes a minimum of 10 Biological Indicators (BIs) exposed during the half and full cycles, but it does not specify if this meets the ISO 11135 requirements
+│      → Evidence: "10 BIs were exposed during this cycle."
+│
+│
+│  [02] The numerical data for the sterilization process is incomplete, with missing values for some parameters
+│      → Evidence: Numerical Data: → 90.0 min (time), → 360.0 min (time)
+│
+│
+│  [03] The relevance score of 6.50/5.0 for the keyword "cycle time" suggests that this parameter may be important, but its significance is not fully explained
+│      → Evidence: Keyword: cycle time, Relevance Score: 6.50/5.0
+│
+│
+│  [04] The context section mentions different load patterns and durations, but it does not provide a clear explanation of how these parameters are related to the sterilization process
+│      → Evidence: Context: Fractional Cycle Fractional cycle of Minimum(25% load) as per load pattern were carried out
+│
+└───────────────────────────────────────────────────────────────────────────────
+
+
+################################################################################
+# SECTION 3: STERILIZATION PARAMETER
+#------------------------------------------------------------------------------
+# Readiness Score:  87.5%
+################################################################################
+
+┌─ ✅ Present (11 items) ───────────────────────────────────────────────────────────
+│
+│  [01] The guideline reference to ISO 11135 general compliance requirements applies
+│      → Evidence: "Requirements: ISO 11135 general compliance requirements apply" | Specific requirement is stated
+│
+│
+│  [02] A detailed description of the sterilization validation process, including acceptance criteria for sterility assurance level (SAL), is documented.
+│      → Evidence: ####################################################################################################...
+│
+│
+│  [03] Guideline Reference: General Requirements
+│      → Evidence: ISO 11135 general compliance requirements apply is mentioned
+│
+│
+│  [04] Requirements: ISO 11135 general compliance requirements apply
+│      → Evidence: "Requirements: ISO 11135 general compliance requirements apply" | Specific requirement is stated
+│
+│
+│  [05] Detailed explanation of the sterilization process
+│      → Evidence: ####################################################################################################...
+│
+│
+│  [06] Sterilization Category
+│      → Evidence: DHF Section title clearly indicates sterilization category.
+│
+│
+│  [07] Guideline Reference
+│      → Evidence: General Requirements are referenced, indicating compliance with ISO 11135.
+│
+│
+│  [08] A detailed description of the sterilization validation process, including acceptance criteria for sterility assurance level (SAL), is documented.
+│      → Evidence: ####################################################################################################...
+│
+│
+│  [09] Detailed explanation of the sterilization process
+│      → Evidence: ####################################################################################################...
+│
+│
+│  [10] A detailed description of the sterilization validation process, including acceptance criteria for sterility assurance level (SAL), is documented.
+│      → Evidence: ####################################################################################################...
+│
+│
+│  [11] Detailed explanation of the sterilization process
+│      → Evidence: ####################################################################################################...
+│
+└───────────────────────────────────────────────────────────────────────────────
+
+┌─ ⚠️ Partial/Needs Clarification (5 items) ───────────────────────────────────────
+│
+│  [01] Specific sterilization parameters are mentioned (1974 items) but lack detail on what these parameters include and how they will be validated.
+│      → Evidence: "# CATEGORY: STERILIZATION PARAMETER (1974 items)"
+│
+│
+│  [02] CATEGORY: STERILIZATION PARAMETER (1974 items)
+│      → Evidence: Category exists but lacks detail on what each item represents
+│
+│
+│  [03] Specific requirements for EtO sterilizer qualification and validation
+│      → Evidence: Only general compliance requirements from ISO 11135 are mentioned; specific requirements for EtO ste...
+│
+│
+│  [04] Validation protocol for temperature uniformity
+│      → Evidence: Temperature uniformity is not explicitly addressed in the provided section, but it's a critical para...
+│
+│
+│  [05] Sterilization cycle development and testing
+│      → Evidence: The process of developing and testing sterilization cycles is mentioned as part of ISO 11135 complia...
+│
+└───────────────────────────────────────────────────────────────────────────────
+
+
+################################################################################
+# SECTION 4: BIOLOGICAL INDICATOR
+#------------------------------------------------------------------------------
+# Readiness Score:  90.0%
+################################################################################
+
+┌─ ✅ Present (9 items) ────────────────────────────────────────────────────────────
+│
+│  [01] The minimum number of BIs to be included in each validation cycle for product load volume is documented
+│      → Evidence: "For Validation: For product load volume of 2.598 = 3 m?: 3 x 3 = 9, the number of BIs to use is at...
+│
+│
+│  [02] The minimum number of BIs to be included in each routine sterilization cycle for product load volume is documented
+│      → Evidence: "For Validation: For product load volume of 2.598 = 3 m?: 3 x 3 = 9, the number of BIs to use is at...
+│
+│
+│  [03] The minimum number of Temperature Sensors to be used for MPQ is documented
+│      → Evidence: "Temperature Sensor to be use at least 3 for MPQ" | "Humidity Sensor to be used at least 2 for MPQ"
+│
+│
+│  [04] The minimum number of Humidity Sensors to be used for MPQ is documented
+│      → Evidence: "Temperature Sensor to be use at least 3 for MPQ" | "Humidity Sensor to be used at least 2 for MPQ"
+│
+│
+│  [05] Loading pattern of Biological indicator (BI) in sterilizer for validation is mentioned but requires a reference to Annexure-B, which should be included for clarity
+│      → Evidence: "Loading pattern of Biological indicator (BJ) in sterilizer (For Validation): Refer Annexure-B" | Th...
+│
+│
+│  [06] Biological indicators should be placed prior to preconditioning as per the loading pattern
+│      → Evidence: Context section mentions "Biological indicators should be placed prior to preconditioning as per the...
+│
+│
+│  [07] Temperature Sensor to be used at least 3 for MPQ and routine control
+│      → Evidence: Numerical Data section does not explicitly mention temperature sensor, but it is mentioned in the co...
+│
+│
+│  [08] Humidity Sensor to be used at least 2 for MPQ and routine control
+│      → Evidence: Numerical Data section does not explicitly mention temperature sensor, but it is mentioned in the co...
+│
+│
+│  [09] Loading pattern of Biological indicator (BI) in sterilizer (For Validation): Refer Annexure-B
+│      → Evidence: "Loading pattern of Biological indicator (BJ) in sterilizer (For Validation): Refer Annexure-B" | Th...
+│
+└───────────────────────────────────────────────────────────────────────────────
+
+┌─ ⚠️ Partial/Needs Clarification (3 items) ───────────────────────────────────────
+│
+│  [01] The loading pattern of Biological indicator (BI) in sterilizer for routine control is not explicitly documented; it only mentions the requirement for temperature and humidity sensors
+│
+│
+│  [02] The type of biological indicators used (e.g., Bacillus alrophiaeus 21x 1006) is mentioned, but it's unclear if this meets the requirements specified in ISO 11135:2014
+│      → Evidence: "a in EO oe or shack heat seizton Bacilus alrophiaeus 21x 1006"
+│
+│
+│  [03] The minimum number of BIs to be included in each validation cycle for product load volume is not explicitly stated as a requirement, but rather as an example; it should be clearly documented as a requirement
+│
+└───────────────────────────────────────────────────────────────────────────────
+
+
+################################################################################
+# SECTION 5: RECORDS/DOCUMENTS
+#------------------------------------------------------------------------------
+# Readiness Score:  88.9%
+################################################################################
+
+┌─ ✅ Present (13 items) ───────────────────────────────────────────────────────────
+│
+│  [01] The organization has identified specific medical devices to be sterilized (e.g., Urethral Dilator /Set Polyurethane, URS Forceps 304, PC+ABS)| Urethral Dilator /Set Polyurethane |"
+│      → Evidence: "No. Name of the Medical Device Material of Construction assemblies in mm? 35
+│
+│
+│  [02] There is no clear documentation of the sterilization validation protocol or procedure, as per ISO 11135 requirements
+│      → Evidence: │ │  Context: │    aper 0.024” SBS PTFE/ FEP or MEFA-Clear, Medical Grade Uncoated 1073B Tyvek® Seal...
+│
+│
+│  [03] Sterilization validation records are present
+│      → Evidence: DHF Section: Records/Documents exists | Revision Issue Effectiv Protocol No. BRP-SVP-006 01 01 dated...
+│
+│
+│  [04] Device description and material of construction are listed for each medical device
+│      → Evidence: Table with detailed information on device name, material, and surface area.
+│
+│
+│  [05] Sterilization process validation protocol or procedure details are mentioned in this section
+│      → Evidence: │    Blister/Tyv 11 2 5 4 12 34 Nitinol, UHMWPE+ ek PET, Titanium Alloy, PET, B-TCP s PLA/PLGA │...
+│
+│
+│  [06] Sterilization validation records are maintained
+│      → Evidence: DHF Section: Records/Documents exists | Revision Issue Effectiv Protocol No. BRP-SVP-006 01 01 dated...
+│
+│
+│  [07] Sterilization validation protocol for each medical device assembly is not separately documented
+│      → Evidence: │    o.: 48/3 & 48/7, Pashan Sus Road, Sus Village, Taluka acision that cinnowers Mulshi, Pune │...
+│
+│
+│  [08] Sterilization process validation protocol or procedure details are mentioned in this section
+│      → Evidence: │    Blister/Tyv 11 2 5 4 12 34 Nitinol, UHMWPE+ ek PET, Titanium Alloy, PET, B-TCP s PLA/PLGA │...
+│
+│
+│  [09] Sterilization validation protocol for each medical device assembly is not separately documented
+│      → Evidence: │    o.: 48/3 & 48/7, Pashan Sus Road, Sus Village, Taluka acision that cinnowers Mulshi, Pune │...
+│
+│
+│  [10] There is no clear documentation of the sterilization validation protocol or procedure, as per ISO 11135 requirements
+│      → Evidence: │ │  Context: │    aper 0.024” SBS PTFE/ FEP or MEFA-Clear, Medical Grade Uncoated 1073B Tyvek® Seal...
+│
+│
+│  [11] Sterilization process validation protocol or procedure details are mentioned in this section
+│      → Evidence: │    Blister/Tyv 11 2 5 4 12 34 Nitinol, UHMWPE+ ek PET, Titanium Alloy, PET, B-TCP s PLA/PLGA │...
+│
+│
+│  [12] Sterilization validation protocol for each medical device assembly is not separately documented
+│      → Evidence: │    o.: 48/3 & 48/7, Pashan Sus Road, Sus Village, Taluka acision that cinnowers Mulshi, Pune │...
+│
+│
+│  [13] There is no clear documentation of the sterilization validation protocol or procedure, as per ISO 11135 requirements
+│      → Evidence: │ │  Context: │    aper 0.024” SBS PTFE/ FEP or MEFA-Clear, Medical Grade Uncoated 1073B Tyvek® Seal...
+│
+└───────────────────────────────────────────────────────────────────────────────
+
+┌─ ⚠️ Partial/Needs Clarification (5 items) ───────────────────────────────────────
+│
+│  [01] The organization has mentioned the relevance of coating but lacks detailed information on its application and validation process
+│      → Evidence: "Keyword: coating Relevance Score: 5.00/5.0"
+│
+│
+│  [02] Sterilization validation details are incomplete, lacking specific information about the sterilization process and parameters used
+│      → Evidence: Numerical Data section exists but lacks context for each parameter (e.g., what they represent)
+│
+│
+│  [03] Coating information is mentioned but lacks detail about coating type, thickness, or application method
+│      → Evidence: Keyword "coating" is present in the table, but no further details are provided.
+│
+│
+│  [04] Coating material and process details are not fully specified
+│      → Evidence: Keyword "coating" is mentioned, but the coating type, application method, and thickness are not prov...
+│
+│
+│  [05] Surface area calculations for sterilization validation are incomplete
+│      → Evidence: Numerical data (e.g., dimensions) is present, but it's unclear how these values were used to calcula...
+│
+└───────────────────────────────────────────────────────────────────────────────
+
+
+################################################################################
+# SECTION 6: SAFETY PRECAUTION
+#------------------------------------------------------------------------------
+# Readiness Score:  86.7%
+################################################################################
+
+┌─ ✅ Present (12 items) ───────────────────────────────────────────────────────────
+│
+│  [01] The company has a procedure for handling sterile barriers
+│      → Evidence: "Use aseptic techniques to transfer them to another sterile container or field, as needed."
+│
+│
+│  [02] A procedure for validating and verifying the effectiveness of sterilization processes as per ISO 11135 requirements is documented
+│      → Evidence: │    in the OT room. P O 13 Once you have retrieved all the necessary items from the sterile │    ba...
+│
+│
+│  [03] The keyword "sterile barrier" is mentioned twice with a high relevance score of 6.50/5.0
+│      → Evidence: Presence of Keyword: sterile barrier and Relevance Score: 6.50/5.0 in both PARAMETER 26 and PARAMETE...
+│
+│
+│  [04] Specific guidelines for maintaining sterility during handling and transfer of the sterile barrier are documented
+│      → Evidence: │ │  Context: │    . P O 10 •Use aseptic techniques to transfer them to another sterile container or...
+│
+│
+│  [05] Clear instructions on how to properly dispose of biohazardous or contaminated materials generated during the process are present
+│      → Evidence: │    PAGE 982 --- 11 •Properly dispose of the sterile barrier packaging and any waste │    generated...
+│
+│
+│  [06] Sterilization process for sterile barrier packaging
+│      → Evidence: ISO 11135 general compliance requirements apply | ISO 11135 general compliance requirements apply (c...
+│
+│
+│  [07] A procedure for validating and verifying the effectiveness of sterilization processes as per ISO 11135 requirements is documented
+│      → Evidence: │    in the OT room. P O 13 Once you have retrieved all the necessary items from the sterile │    ba...
+│
+│
+│  [08] Specific guidelines for maintaining sterility during handling and transfer of the sterile barrier are documented
+│      → Evidence: │ │  Context: │    . P O 10 •Use aseptic techniques to transfer them to another sterile container or...
+│
+│
+│  [09] Clear instructions on how to properly dispose of biohazardous or contaminated materials generated during the process are present
+│      → Evidence: │    PAGE 982 --- 11 •Properly dispose of the sterile barrier packaging and any waste │    generated...
+│
+│
+│  [10] Specific guidelines for maintaining sterility during handling and transfer of the sterile barrier are documented
+│      → Evidence: │ │  Context: │    . P O 10 •Use aseptic techniques to transfer them to another sterile container or...
+│
+│
+│  [11] Clear instructions on how to properly dispose of biohazardous or contaminated materials generated during the process are present
+│      → Evidence: │    PAGE 982 --- 11 •Properly dispose of the sterile barrier packaging and any waste │    generated...
+│
+│
+│  [12] A procedure for validating and verifying the effectiveness of sterilization processes as per ISO 11135 requirements is documented
+│      → Evidence: │    in the OT room. P O 13 Once you have retrieved all the necessary items from the sterile │    ba...
+│
+└───────────────────────────────────────────────────────────────────────────────
+
+┌─ ⚠️ Partial/Needs Clarification (6 items) ───────────────────────────────────────
+│
+│  [01] The procedure mentions maintaining aseptic technique, but it does not specify how to ensure sterility throughout the procedure
+│      → Evidence: "Maintain strict aseptic technique throughout the procedure." (This is partially addressed as it men...
+│
+│
+│  [02] The procedure for handling the sterile barrier is partially documented, mentioning aseptic techniques but lacking specific details on how to maintain sterility throughout the process
+│      → Evidence: Context section mentions "Maintain strict aseptic technique throughout the procedure" but lacks clar...
+│
+│
+│  [03] The importance of proper disposal of the sterile barrier packaging and waste is mentioned, but the exact procedures for biohazardous or contaminated materials are not fully documented
+│      → Evidence: Presence of P O 11 •Properly dispose of the sterile barrier packaging and any waste generated during...
+│
+│
+│  [04] The inner pack opening procedure by the scrub nurse is mentioned, but the specific steps involved are not detailed
+│      → Evidence: Context section mentions "The inner pack is opened by the scrub nurse in the preparation room or in...
+│
+│
+│  [05] The importance of positioning items for immediate use and maintaining aseptic technique throughout the procedure is mentioned, but lacks specific details on how to achieve this
+│      → Evidence: Presence of P O 13 Once you have retrieved all the necessary items from the sterile barrier system,...
+│
+│
+│  [06] Aseptic technique transfer to another container or field
+│      → Evidence: Documented, but lacks specific details on the aseptic technique used and its validation.
+│
+└───────────────────────────────────────────────────────────────────────────────
+
+
+################################################################################
+# SECTION 7: TEST
+#------------------------------------------------------------------------------
+# Readiness Score:  91.1%
+################################################################################
+
+┌─ ✅ Present (14 items) ───────────────────────────────────────────────────────────
+│
+│  [01] The sterilization process is validated to meet pre-determined specifications under Minimum And Maximum load Pattern conditions
+│      → Evidence: "1.2 The Data and Test results must demonstrate that the process meets pre-determined specifications...
+│
+│
+│  [02] A clear description of the sterilization process, including the equipment used and the parameters controlled, is documented
+│      → Evidence: │  PDF File: Eto revalidation 26.02.2025.pdf │  Generated: 2025-12-03 10:43:39 │  Document Types: st...
+│
+│
+│  [03] The document type includes "validation" and "testing".
+│      → Evidence: Document Types section lists validation, testing, etc.
+│
+│
+│  [04] ISO 11135 is referenced as a guideline for ethylene oxide sterilization.
+│      → Evidence: Context mentions ISO 11135:2014
+│
+│
+│  [05] General Requirements are mentioned as applicable.
+│      → Evidence: Guideline Reference states ISO 11135 general compliance requirements apply
+│
+│
+│  [06] A detailed description of the Minimum And Maximum load Pattern conditions used in the revalidation report is present.
+│      → Evidence: │  Context: │    oad, Sus Village, Taluka Precision that ernnower Mulshi, Pune Maharashtra, 411021 I...
+│
+│
+│  [07] The document specifies which parameters were measured or how they relate to the sterilization process.
+│      → Evidence: │  PDF File: Eto revalidation 26.02.2025.pdf │  Generated: 2025-12-03 10:43:39 │  Document Types: st...
+│
+│
+│  [08] Document Information
+│      → Evidence: Document metadata (PDF File, Generated Date, etc.) and document types are provided.
+│
+│
+│  [09] A detailed description of the Minimum And Maximum load Pattern conditions used in the revalidation report is present.
+│      → Evidence: │  Context: │    oad, Sus Village, Taluka Precision that ernnower Mulshi, Pune Maharashtra, 411021 I...
+│
+│
+│  [10] A clear description of the sterilization process, including the equipment used and the parameters controlled, is documented
+│      → Evidence: │  PDF File: Eto revalidation 26.02.2025.pdf │  Generated: 2025-12-03 10:43:39 │  Document Types: st...
+│
+│
+│  [11] A detailed description of the Minimum And Maximum load Pattern conditions used in the revalidation report is present.
+│      → Evidence: │  Context: │    oad, Sus Village, Taluka Precision that ernnower Mulshi, Pune Maharashtra, 411021 I...
+│
+│
+│  [12] The document specifies which parameters were measured or how they relate to the sterilization process.
+│      → Evidence: │  PDF File: Eto revalidation 26.02.2025.pdf │  Generated: 2025-12-03 10:43:39 │  Document Types: st...
+│
+│
+│  [13] A clear description of the sterilization process, including the equipment used and the parameters controlled, is documented
+│      → Evidence: │  PDF File: Eto revalidation 26.02.2025.pdf │  Generated: 2025-12-03 10:43:39 │  Document Types: st...
+│
+│
+│  [14] The document specifies which parameters were measured or how they relate to the sterilization process.
+│      → Evidence: │  PDF File: Eto revalidation 26.02.2025.pdf │  Generated: 2025-12-03 10:43:39 │  Document Types: st...
+│
+└───────────────────────────────────────────────────────────────────────────────
+
+┌─ ⚠️ Partial/Needs Clarification (4 items) ───────────────────────────────────────
+│
+│  [01] The document mentions the relevance score (10.00/5.0) but does not provide further explanation or context about how this score is calculated
+│      → Evidence: "Keyword: ethylene oxide Relevance Score: 10.00/5.0"
+│
+│
+│  [02] The scope of the report does not clearly specify which medical devices are being validated for ethylene oxide sterilization.
+│      → Evidence: Context mentions "medical device" but lacks specificity
+│
+│
+│  [03] The document does not provide a clear summary of the sterilization process or its performance.
+│      → Evidence: Context mentions "Ethylene oxide sterilization process consistently performs as intended" but lacks...
+│
+│
+│  [04] The report's scope and objectives are partially documented, but more clarity is needed on what specific strategies will be presented for validation.
+│      → Evidence: 2.0 SCOPE section mentions providing sterilization validation strategies but lacks specificity
+│
+└───────────────────────────────────────────────────────────────────────────────
+
+
+################################################################################
+# SECTION 8: ACCEPTANCE CRITERIA
+#------------------------------------------------------------------------------
+# Readiness Score:  92.0%
+################################################################################
+
+┌─ ✅ Present (16 items) ───────────────────────────────────────────────────────────
+│
+│  [01] The sterilization process parameters are within specifications
+│      → Evidence: "process parameters are Within specificaHoy hence haif cycre— 2/5 Sapsfactons)"
+│
+│
+│  [02] The validation protocol or procedure for sterilization is documented
+│      → Evidence: │ │  Context: │    n each of the total non- sterile packages of different product. 4 samples taken f...
+│
+│
+│  [03] The documentation of the sterilization process parameters in a format that meets regulatory requirements (e.g., ISO 11135) is documented
+│      → Evidence: │ │  Context: │    n each of the total non- sterile packages of different product. 4 samples taken f...
+│
+│
+│  [04] The sterilization process parameters are listed with specific details such as temperature (48 + 7°C), pressure (0 - 0.060 bar), and humidity (50-80%)
+│      → Evidence: Temperature of Product before Sterilization, Temperature of sterilization Load, Pressure, RH
+│
+│
+│  [05] A clear description or justification for the relevance score (6.50/5.0) is documented
+│      → Evidence: │    : ager cio Survey No. : 48/3 & 48/7, Pashan Sus Road, Sus Village, Taluka ee Mulshi, Pune │...
+│
+│
+│  [06] The sterilization process validation protocol or procedure is mentioned
+│      → Evidence: │ │  Context: │    n each of the total non- sterile packages of different product. 4 samples taken f...
+│
+│
+│  [07] Acceptance Criteria for sterilization process
+│      → Evidence: Presence of DHF section and numerical data
+│
+│
+│  [08] Temperature of Product before Sterilization
+│      → Evidence: Specification (25°C + 2°C)
+│
+│
+│  [09] The validation protocol or procedure for sterilization is documented
+│      → Evidence: │ │  Context: │    n each of the total non- sterile packages of different product. 4 samples taken f...
+│
+│
+│  [10] The sterilization process validation protocol or procedure is mentioned
+│      → Evidence: │ │  Context: │    n each of the total non- sterile packages of different product. 4 samples taken f...
+│
+│
+│  [11] The validation protocol or procedure for sterilization is documented
+│      → Evidence: │ │  Context: │    n each of the total non- sterile packages of different product. 4 samples taken f...
+│
+│
+│  [12] The documentation of the sterilization process parameters in a format that meets regulatory requirements (e.g., ISO 11135) is documented
+│      → Evidence: │ │  Context: │    n each of the total non- sterile packages of different product. 4 samples taken f...
+│
+│
+│  [13] A clear description or justification for the relevance score (6.50/5.0) is documented
+│      → Evidence: │    : ager cio Survey No. : 48/3 & 48/7, Pashan Sus Road, Sus Village, Taluka ee Mulshi, Pune │...
+│
+│
+│  [14] The sterilization process validation protocol or procedure is mentioned
+│      → Evidence: │ │  Context: │    n each of the total non- sterile packages of different product. 4 samples taken f...
+│
+│
+│  [15] The documentation of the sterilization process parameters in a format that meets regulatory requirements (e.g., ISO 11135) is documented
+│      → Evidence: │ │  Context: │    n each of the total non- sterile packages of different product. 4 samples taken f...
+│
+│
+│  [16] A clear description or justification for the relevance score (6.50/5.0) is documented
+│      → Evidence: │    : ager cio Survey No. : 48/3 & 48/7, Pashan Sus Road, Sus Village, Taluka ee Mulshi, Pune │...
+│
+└───────────────────────────────────────────────────────────────────────────────
+
+┌─ ⚠️ Partial/Needs Clarification (4 items) ───────────────────────────────────────
+│
+│  [01] Acceptance criteria for sterilization are mentioned but not fully documented
+│      → Evidence: "Acceptance Criteria met [ Yes]/[No] Comments: Verified by:"
+│
+│
+│  [02] The relevance score for the material parameter is not clear in its context or significance
+│      → Evidence: Keyword: material, Relevance Score: 6.50/5.0
+│
+│
+│  [03] The preconditioning temperature and time are mentioned but lack specific details
+│      → Evidence: Preconditioni Temperature of sterilization Load:=
+│
+│
+│  [04] The pre-vacuum time is listed as "0" without further explanation
+│      → Evidence: Pre vacuum time: 0
+│
+└───────────────────────────────────────────────────────────────────────────────
+
+
+################################################################################
+# SECTION 9: STORAGE & DISTRIBUTION
+#------------------------------------------------------------------------------
+# Readiness Score:  78.8%
+################################################################################
+
+┌─ ✅ Present (9 items) ────────────────────────────────────────────────────────────
+│
+│  [01] The calibration results reported are valid at the stated conditions of measurement
+│      → Evidence: "3) The calibration results reported in the certificate are valid at the time of and under the state...
+│
+│
+│  [02] A detailed description of the sterilization validation process is documented in this Storage & Distribution section.
+│      → Evidence: │    uncertainty in measurement obtained by multiplying the standard uncertainty by the │    coverag...
+│
+│
+│  [03] Storage and Distribution parameter details are present
+│      → Evidence: Parameter 12 with keyword "measurement" is documented.
+│
+│
+│  [04] Storage and Distribution parameter validation data for sterilization
+│      → Evidence: │    uncertainty in measurement obtained by multiplying the standard uncertainty by the │    coverag...
+│
+│
+│  [05] Calibration certificate for temperature and humidity
+│      → Evidence: Numerical Data: → 95.0 % (concentration) and → 95.0 % (humidity)
+│
+│
+│  [06] Storage and Distribution parameter validation data for sterilization
+│      → Evidence: │    uncertainty in measurement obtained by multiplying the standard uncertainty by the │    coverag...
+│
+│
+│  [07] A detailed description of the sterilization validation process is documented in this Storage & Distribution section.
+│      → Evidence: │    uncertainty in measurement obtained by multiplying the standard uncertainty by the │    coverag...
+│
+│
+│  [08] Storage and Distribution parameter validation data for sterilization
+│      → Evidence: │    uncertainty in measurement obtained by multiplying the standard uncertainty by the │    coverag...
+│
+│
+│  [09] A detailed description of the sterilization validation process is documented in this Storage & Distribution section.
+│      → Evidence: │    uncertainty in measurement obtained by multiplying the standard uncertainty by the │    coverag...
+│
+└───────────────────────────────────────────────────────────────────────────────
+
+┌─ ⚠️ Partial/Needs Clarification (6 items) ───────────────────────────────────────
+│
+│  [01] Storage and distribution parameters (e.g., temperature, humidity) are mentioned but lack specific details on their ranges or tolerances.
+│      → Evidence: Numerical Data section lists percentages for concentration and humidity, but no clear storage condit...
+│
+│
+│  [02] Calibration certificate context lacks clarity on measurement conditions
+│      → Evidence: Context mentions calibration results valid at the time of measurement but does not specify temperatu...
+│
+│
+│  [03] Calibration point selection process is partially documented
+│      → Evidence: It's mentioned that points were selected as per customer specifications, but details about the selec...
+│
+│
+│  [04] Storage conditions for sterilized products
+│      → Evidence: Context mentions calibration results are valid at the time of measurement, but storage conditions ar...
+│
+│
+│  [05] Temperature range during storage
+│      → Evidence: Numerical Data does not provide temperature range; only concentration and humidity levels are mentio...
+│
+│
+│  [06] Humidity control during storage
+│      → Evidence: Numerical Data provides 95.0 % (humidity) level, but details on how it's controlled or maintained ar...
+│
+└───────────────────────────────────────────────────────────────────────────────
+
+┌─ ❌ Missing (1 items) ────────────────────────────────────────────────────────────
+│
+│  [01] Storage area classification (e.g., ISO Class 7 or higher)
+│
+└───────────────────────────────────────────────────────────────────────────────

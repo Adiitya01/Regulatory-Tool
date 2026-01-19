@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+.env.*
+
+# Javascript/Node
+Frontend/node_modules/
+Frontend/dist/
+Frontend/.env
+
+# Project specific
+temp/
+outputs/
+reports/
+*.log
+chat_test.json
+
+# IDE
+.vscode/
+
+# Large files
+*.pdf

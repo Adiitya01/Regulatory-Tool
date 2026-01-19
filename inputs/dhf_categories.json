@@ -1,0 +1,52 @@
+{
+  "Product Requirement": {
+    "keywords": ["product", "definition", "material compatibility", "bioburden", "family"],
+    "patterns": ["product\\s+(?:definition|requirement|characteristic)", "microbiological\\s+quality"],
+    "priority": 1
+  },
+  "Process Validation": {
+    "keywords": ["validation", "qualification", "IQ", "OQ", "PQ", "performance"],
+    "patterns": ["\\b(?:IQ|OQ|PQ)\\b", "(?:installation|operational|performance)\\s+qualification"],
+    "priority": 1
+  },
+  "Sterilization Parameter": {
+    "keywords": ["preconditioning", "sterilization", "aeration", "temperature", "pressure", "humidity", "EO concentration", "exposure time"],
+    "patterns": ["(?:preconditioning|sterilization|aeration)\\s+(?:phase|time|parameters)", "(?:temperature|pressure|humidity)\\s+(?:control|parameters|requirements)"],
+    "priority": 1
+  },
+  "Biological Indicator": {
+    "keywords": ["BI", "biological indicator", "spore", "D-value", "Z-value", "half-cycle"],
+    "patterns": ["\\bBI\\b|biological\\s+indicator", "(?:overkill|half-cycle)\\s+method"],
+    "priority": 1
+  },
+  "Records/Documents": {
+    "keywords": ["documentation", "records", "procedures", "traceability", "validation report", "SOP"],
+    "patterns": ["(?:documentation|records|procedures)\\s+(?:control|requirements)", "quality\\s+management"],
+    "priority": 1
+  },
+  "Safety Precaution": {
+    "keywords": ["EO safety", "flammable", "carcinogenic", "exposure", "ventilation"],
+    "patterns": ["(?:EO|ethylene\\s+oxide)\\s+safety", "(?:flammable|carcinogenic)"],
+    "priority": 1
+  },
+  "Test": {
+    "keywords": ["sterility test", "bioburden test", "residue test", "BET", "analytical"],
+    "patterns": ["(?:sterility|ToS)\\s+test", "sublethal\\s+cycle\\s+testing"],
+    "priority": 1
+  },
+  "Monitoring": {
+    "keywords": ["routine monitoring", "data logging", "alarm", "parameter control"],
+    "patterns": ["(?:routine|continuous)\\s+monitoring", "data\\s+logging"],
+    "priority": 1
+  },
+  "Acceptance Criteria": {
+    "keywords": ["acceptance criteria", "release criteria", "SAL", "tolerance"],
+    "patterns": ["acceptance\\s+criteria", "parametric\\s+release\\s+criteria"],
+    "priority": 1
+  },
+  "Storage & Distribution": {
+    "keywords": ["storage", "distribution", "aeration", "post-sterilization"],
+    "patterns": ["sterile\\s+product\\s+storage", "storage\\s+conditions"],
+    "priority": 1
+  }
+}

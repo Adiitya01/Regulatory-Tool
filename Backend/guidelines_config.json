@@ -1,0 +1,21 @@
+{
+  "guidelines": [
+    {
+      "id": "iso11135",
+      "name": "ISO 11135",
+      "description": "Ethylene Oxide Sterilization Validation",
+      "folder": "iso11135",
+      "backend": "ISO11135_Backend",
+      "active": true
+    },
+    {
+      "id": "biocompatibility",
+      "name": "Biocompatibility",
+      "description": "Medical Device Biocompatibility Assessment",
+      "folder": "biocompatibility",
+      "backend": "Biocompatibility_Backend",
+      "active": false
+    }
+  ],
+  "default_guideline": "iso11135"
+}
