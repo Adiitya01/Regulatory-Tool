@@ -27,6 +27,7 @@ from ISO11135_Backend.validation import EnhancedMultiLayerValidationEngine
 from ISO11135_Backend.pipeline import DHFPipeline, PipelineResult, PipelineStep
 from ISO11135_Backend.RAG_Engine import get_rag_engine
 import ISO11135_Backend.config as iso11135_config
+from ISO11135_Backend.storage_manager import storage
 import logging_setup
 
 logger = logging_setup.get_logger(__name__)
@@ -292,9 +293,12 @@ async def upload_guideline(file: UploadFile = File(...)):
         # Filter by relevance score
         high_relevance_params = [p for p in parameters if p['relevance_score'] >= iso11135_config.MIN_RELEVANCE_SCORE]
         
-        # Save results
+        # Save results locally
         output_path = iso11135_config.OUTPUTS_DIR / iso11135_config.GUIDELINE_EXTRACTION_OUTPUT
         save_results_to_text(high_relevance_params, str(output_path))
+        
+        # Persist to Storage (Cloud/Local)
+        storage.save_file(output_path, iso11135_config.GUIDELINE_EXTRACTION_OUTPUT)
         
         # Clean up temp file
         temp_path.unlink()
@@ -347,6 +351,10 @@ async def polish_guideline():
             # Save polished output
             output_path = iso11135_config.OUTPUTS_DIR / iso11135_config.POLISHED_OUTPUT_FILE
             save_polished_output(polished_content, str(output_path))
+            
+            # Persist to Storage
+            storage.save_file(output_path, iso11135_config.POLISHED_OUTPUT_FILE)
+            
         finally:
             os.chdir(original_cwd)
             if original_file:
@@ -384,6 +392,9 @@ async def upload_dhf(file: UploadFile = File(...)):
         # Extract DHF content
         output_file = str(iso11135_config.OUTPUTS_DIR / iso11135_config.DHF_EXTRACTION_OUTPUT)
         extract_single_pdf(str(temp_path), output_file)
+        
+        # Persist to Storage
+        storage.save_file(output_file, iso11135_config.DHF_EXTRACTION_OUTPUT)
         
         # Clean up temp file
         temp_path.unlink()
@@ -438,6 +449,9 @@ async def run_validation():
         # Save validation report
         report_path = iso11135_config.OUTPUTS_DIR / iso11135_config.VALIDATION_REPORT
         save_validation_report(results, str(report_path))
+        
+        # Persist to Storage
+        storage.save_file(report_path, iso11135_config.VALIDATION_REPORT)
         
         # Calculate overall readiness
         overall_readiness = sum(r.readiness_score for r in results) / len(results) if results else 0.0
@@ -514,7 +528,7 @@ def save_validation_report(results, report_path: str):
 
 @app.get("/api/files/{filename}")
 async def download_file(filename: str):
-    """Download a generated file"""
+    """Download a generated file (Local or Cloud)"""
     # Security: Only allow downloading from outputs directory
     allowed_files = [
         iso11135_config.GUIDELINE_EXTRACTION_OUTPUT,
@@ -527,10 +541,18 @@ async def download_file(filename: str):
     if filename not in allowed_files:
         raise HTTPException(status_code=403, detail="File not allowed")
     
+    # 1. Check Cloud Storage First
+    if storage.provider == "supabase":
+        file_url = storage.get_file_url(filename)
+        if file_url:
+            from fastapi.responses import RedirectResponse
+            return RedirectResponse(file_url)
+
+    # 2. Check Local Storage (Fallback)
     # Check Backend/outputs first
     file_path = iso11135_config.OUTPUTS_DIR / filename
     
-    # If not found, check root/outputs
+    # If not found, check root/outputs (legacy)
     if not file_path.exists():
         root_outputs = iso11135_config.PROJECT_ROOT.parent / "outputs" / filename
         if root_outputs.exists():
