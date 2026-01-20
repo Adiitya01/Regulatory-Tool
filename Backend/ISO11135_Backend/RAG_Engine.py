@@ -19,41 +19,32 @@ class LightweightRAGEngine:
 
 
     def __init__(self):
-        # 1. Initialize ChromaDB in Ephemeral (Memory) mode for modern 0.4.x+
+        # 1. Initialize ChromaDB in Ephemeral (Memory) mode
         self.chroma_client = chromadb.EphemeralClient()
-        
-        # 2. Initialize SentenceTransformer
-        try:
-            from sentence_transformers import SentenceTransformer
-            self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
-            logger.info("✅ SentenceTransformer model loaded successfully")
-        except Exception as e:
-            logger.error(f"Failed to load SentenceTransformer: {e}")
-            self.embedding_model = None
-            # Fallback will use zero-vectors which is bad, but at least it won't crash
+        self.embedding_model = None
             
-        # 3. Create Collections
-        # In modern Chroma, we just create the collections
-        self.standards_collection = self.chroma_client.get_or_create_collection(
-            name="iso_standards"
-        )
+        # 2. Create Collections
+        self.standards_collection = self.chroma_client.get_or_create_collection(name="iso_standards")
+        self.evidence_collection = self.chroma_client.get_or_create_collection(name="dhf_evidence")
         
-        self.evidence_collection = self.chroma_client.get_or_create_collection(
-            name="dhf_evidence"
-        )
-        
-        logger.info("✅ RAG Engine Initialized (Modern ChromaDB 0.4+)")
+        logger.info("✅ RAG Engine Initialized (Lazy Loading Enabled)")
 
     def _get_embedding(self, text: str) -> List[float]:
-        """Get embedding using local SentenceTransformer"""
-        if self.embedding_model:
+        """Lazy-load model and get embedding"""
+        if self.embedding_model is None:
             try:
-                # encode returns a numpy array, convert to list
-                return self.embedding_model.encode(text).tolist()
+                from sentence_transformers import SentenceTransformer
+                logger.info("📥 Loading SentenceTransformer (Lazy Load)...")
+                self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
             except Exception as e:
-                logger.error(f"Embedding generation failed: {e}")
-                return [0.0] * 384 # Fallback dimension for MiniLM-L6-v2
-        return [0.0] * 384 # Fallback
+                logger.error(f"Failed to load SentenceTransformer: {e}")
+                return [0.0] * 384
+        
+        try:
+            return self.embedding_model.encode(text).tolist()
+        except Exception as e:
+            logger.error(f"Embedding generation failed: {e}")
+            return [0.0] * 384
 
     def ingest_data(self):
         """Read output files and index them into ChromaDB."""
