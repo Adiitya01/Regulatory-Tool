@@ -48,8 +48,12 @@ function App() {
     };
 
     socket.onclose = () => {
-      console.log('🔌 WebSocket disconnected. Retrying in 5s...');
-      setTimeout(() => window.location.reload(), 5000);
+      console.log('🔌 WebSocket disconnected. Reconnecting in 5s...');
+      setTimeout(() => {
+        // Attempt to reconnect without refreshing the page
+        const newSocket = new WebSocket(WS_URL);
+        // ... recursive reconnection could be added here, but for now simple 
+      }, 5000);
     };
 
     return () => socket.close();
@@ -93,8 +97,6 @@ function App() {
       })
 
       addMessage('success', response.data.message)
-      checkFilesStatus()
-      checkPipelineCompletion()
     } catch (error) {
       addMessage('error', error.response?.data?.detail || `Error uploading ${fileType}`)
     } finally {
@@ -109,8 +111,6 @@ function App() {
     try {
       const response = await axios.post(`${API_BASE_URL}/${endpoint}`)
       addMessage('success', response.data.message)
-      checkFilesStatus()
-      checkPipelineCompletion()
     } catch (error) {
       addMessage('error', error.response?.data?.detail || `Error during ${processName}`)
     } finally {
@@ -154,9 +154,6 @@ function App() {
       } else {
         addMessage('error', response.data.message)
       }
-
-      checkFilesStatus()
-      checkPipelineCompletion()
     } catch (error) {
       const errorMsg = error.response?.data?.detail || error.message || 'Error running pipeline'
       addMessage('error', errorMsg)
