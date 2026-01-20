@@ -21,29 +21,31 @@ class LightweightRAGEngine:
     def __init__(self):
         # 1. Initialize ChromaDB in Ephemeral (Memory) mode
         self.chroma_client = chromadb.EphemeralClient()
-        self.embedding_model = None
             
         # 2. Create Collections
         self.standards_collection = self.chroma_client.get_or_create_collection(name="iso_standards")
         self.evidence_collection = self.chroma_client.get_or_create_collection(name="dhf_evidence")
         
-        logger.info("✅ RAG Engine Initialized (Lazy Loading Enabled)")
+        logger.info("✅ RAG Engine Initialized (Cloud Embeddings Mode)")
 
     def _get_embedding(self, text: str) -> List[float]:
-        """Lazy-load model and get embedding"""
-        if self.embedding_model is None:
-            try:
-                from sentence_transformers import SentenceTransformer
-                logger.info("📥 Loading SentenceTransformer (Lazy Load)...")
-                self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
-            except Exception as e:
-                logger.error(f"Failed to load SentenceTransformer: {e}")
-                return [0.0] * 384
-        
+        """Get embedding using Hugging Face Inference API (Serverless)"""
+        if not config.HF_TOKEN:
+            logger.error("❌ HF_TOKEN missing - cannot generate embeddings")
+            return [0.0] * 384
+
+        api_url = "https://api-inference.huggingface.co/pipeline/feature-extraction/sentence-transformers/all-MiniLM-L6-v2"
+        headers = {"Authorization": f"Bearer {config.HF_TOKEN}"}
+
         try:
-            return self.embedding_model.encode(text).tolist()
+            response = requests.post(api_url, headers=headers, json={"inputs": text}, timeout=10)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                logger.error(f"HF API Error: {response.status_code} - {response.text}")
+                return [0.0] * 384
         except Exception as e:
-            logger.error(f"Embedding generation failed: {e}")
+            logger.error(f"Embedding API call failed: {e}")
             return [0.0] * 384
 
     def ingest_data(self):
