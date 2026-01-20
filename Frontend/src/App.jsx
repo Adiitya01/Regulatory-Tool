@@ -21,17 +21,39 @@ function App() {
   const [selectedFile, setSelectedFile] = useState(null)
   const [fileContent, setFileContent] = useState('')
 
+  const WS_URL = API_BASE_URL.replace('http', 'ws').replace('/api', '/api/ws/status');
+
   useEffect(() => {
-    loadGuidelines()
-    checkLlmStatus()
-    checkFilesStatus()
-    checkPipelineCompletion()
-    const interval = setInterval(() => {
-      checkFilesStatus()
-      checkPipelineCompletion()
-    }, 10000)
-    return () => clearInterval(interval)
-  }, [])
+    loadGuidelines();
+
+    // Always-On WebSocket Connection
+    console.log('🔌 Connecting to WebSocket:', WS_URL);
+    const socket = new WebSocket(WS_URL);
+
+    socket.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      if (message.type === 'STATUS_UPDATE') {
+        const { llm, pipeline } = message.data;
+        if (llm) setLlmStatus(llm);
+        if (pipeline) {
+          setPipelineCompletion(pipeline);
+          // Sync filesStatus from pipeline data
+          const newFilesStatus = {};
+          pipeline.steps.forEach(step => {
+            newFilesStatus[step.filename] = { exists: step.status === 'completed' };
+          });
+          setFilesStatus(newFilesStatus);
+        }
+      }
+    };
+
+    socket.onclose = () => {
+      console.log('🔌 WebSocket disconnected. Retrying in 5s...');
+      setTimeout(() => window.location.reload(), 5000);
+    };
+
+    return () => socket.close();
+  }, []);
 
   const loadGuidelines = async () => {
     try {
@@ -42,32 +64,7 @@ function App() {
     }
   }
 
-  const checkLlmStatus = async () => {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/llm/status`)
-      setLlmStatus(response.data)
-    } catch (error) {
-      setLlmStatus({ connected: false, message: 'Error checking LLM status' })
-    }
-  }
-
-  const checkFilesStatus = async () => {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/files/status`)
-      setFilesStatus(response.data.files)
-    } catch (error) {
-      console.error('Error checking files status:', error)
-    }
-  }
-
-  const checkPipelineCompletion = async () => {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/pipeline/completion`)
-      setPipelineCompletion(response.data)
-    } catch (error) {
-      console.error('Error checking pipeline completion:', error)
-    }
-  }
+  // Status is now handled via WebSocket
 
   const addMessage = (type, text) => {
     setMessages(prev => [...prev, { type, text, timestamp: new Date() }])
