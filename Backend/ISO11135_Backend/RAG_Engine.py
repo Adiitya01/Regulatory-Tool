@@ -31,16 +31,22 @@ class LightweightRAGEngine:
     def _get_embedding(self, text: str) -> List[float]:
         """Get embedding using Hugging Face Inference API (Serverless)"""
         if not config.HF_TOKEN:
-            logger.error("❌ HF_TOKEN missing - cannot generate embeddings")
+            logger.error("❌ HF_TOKEN missing in environment variables")
             return [0.0] * 384
 
-        api_url = "https://api-inference.huggingface.co/pipeline/feature-extraction/sentence-transformers/all-MiniLM-L6-v2"
+        # Correct endpoint for Sentence Transformers inference
+        model_id = "sentence-transformers/all-MiniLM-L6-v2"
+        api_url = f"https://api-inference.huggingface.co/models/{model_id}"
         headers = {"Authorization": f"Bearer {config.HF_TOKEN}"}
 
         try:
-            response = requests.post(api_url, headers=headers, json={"inputs": text}, timeout=10)
+            response = requests.post(api_url, headers=headers, json={"inputs": text}, timeout=15)
             if response.status_code == 200:
-                return response.json()
+                result = response.json()
+                # Some API responses are wrapped in another list
+                if isinstance(result, list) and len(result) > 0 and isinstance(result[0], list):
+                    return result[0]
+                return result
             else:
                 logger.error(f"HF API Error: {response.status_code} - {response.text}")
                 return [0.0] * 384
@@ -50,12 +56,15 @@ class LightweightRAGEngine:
 
     def ingest_data(self):
         """Read output files and index them into ChromaDB."""
-        logger.info("🔄 Starting RAG Ingestion...")
+        logger.info("🚀 RAG Ingestion Started...")
         
+        logger.info("🔄 Step 1/2: Ingesting Regulatory Standards...")
         self._ingest_standard()
+        
+        logger.info("🔄 Step 2/2: Ingesting Validation Evidence...")
         self._ingest_evidence()
         
-        logger.info(f"✅ Ingestion Complete. Standards: {self.standards_collection.count()}, Evidence: {self.evidence_collection.count()}")
+        logger.info(f"✅ RAG Ingestion Complete! Total Standards: {self.standards_collection.count()}, Total Evidence: {self.evidence_collection.count()}")
 
     def _ingest_standard(self):
         """Ingest the Polished Regulatory Guidance (The Rules)"""
