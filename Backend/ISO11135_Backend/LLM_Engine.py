@@ -896,9 +896,10 @@ def main():
         print("-" * 50)
         preview_lines = polished_content.split('\n')[:15]
         print('\n'.join(preview_lines))
-        if len(polished_content.split('\n')) > 15:
+        num_lines = len(polished_content.split('\n'))
+        if num_lines > 15:
             print("...")
-            print(f"[+{len(polished_content.split('\n')) - 15} more lines in file]")
+            print(f"[+{num_lines - 15} more lines in file]")
         print("-" * 50)
         
     except KeyboardInterrupt:
