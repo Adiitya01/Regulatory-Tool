@@ -46,6 +46,7 @@ status_manager = StatusWebsocketManager()
 app_state = {
     "llm": {"connected": False, "message": "Initializing..."},
     "files": {},
+    "rag_status": {"ready": False, "indexed_count": 0},
     "pipeline": None,
     "last_update": None
 }
@@ -62,14 +63,17 @@ async def background_status_monitor():
                 "model": iso11135_config.LLM_MODEL_NAME if connected else None
             }
             
-            # 2. Check Pipeline (Trigger logic from existing endpoints)
-            # We fetch this every 30s to keep the UI fresh without polling
+            # 2. Check Pipeline
             status_data = await get_pipeline_completion_status()
             app_state["pipeline"] = status_data
+
+            # 3. Check RAG Status
+            rag = get_rag_engine()
+            app_state["rag_status"] = rag.get_status()
             
             app_state["last_update"] = datetime.now().isoformat()
             
-            # 3. Broadcast to all open WebSockets
+            # 4. Broadcast to all open WebSockets
             await status_manager.broadcast({"type": "STATUS_UPDATE", "data": app_state})
             
         except Exception as e:
@@ -829,6 +833,7 @@ async def trigger_rag_ingestion(background_tasks: BackgroundTasks):
     """Trigger background ingestion of RAG data."""
     try:
         rag = get_rag_engine()
+        # Offload to background completely
         background_tasks.add_task(rag.ingest_data)
         return {"status": "Ingestion started in background"}
     except Exception as e:

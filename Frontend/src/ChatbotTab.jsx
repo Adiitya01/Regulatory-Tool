@@ -6,11 +6,10 @@ const API_BASE_URL = (BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL)
 
 console.log('Chatbot using API Base URL:', API_BASE_URL);
 
-function ChatbotTab({ filesStatus }) {
+function ChatbotTab({ filesStatus, ragStatus }) {
     const [messages, setMessages] = useState([])
     const [inputMessage, setInputMessage] = useState('')
     const [isLoading, setIsLoading] = useState(false)
-    const [ragIngested, setRagIngested] = useState(false)
     const [isIngesting, setIsIngesting] = useState(false)
     const messagesEndRef = useRef(null)
 
@@ -30,18 +29,23 @@ function ChatbotTab({ filesStatus }) {
     const hasReceivedStatus = Object.keys(filesStatus).length > 0
     const dataAvailable = polishedExists || validationExists
 
+    useEffect(() => {
+        if (ragStatus.ready && messages.length === 0) {
+            addBotMessage("✅ Knowledge base loaded! I'm ready to answer your questions about ISO 11135 compliance.")
+        }
+    }, [ragStatus.ready])
+
     const handleIngestData = async () => {
         setIsIngesting(true)
         try {
             const response = await axios.post(`${API_BASE_URL}/rag/ingest`)
             if (response.status === 200) {
-                setRagIngested(true)
-                addBotMessage("✅ Knowledge base loaded! I'm ready to answer your questions about ISO 11135 compliance.")
+                // We don't set ready here, we wait for the WebSocket update
+                addBotMessage("📥 Processing knowledge base in background...")
             }
         } catch (error) {
             console.error('Ingest error:', error);
-            addBotMessage("❌ Failed to load knowledge base. Please ensure the backend is running and the necessary files exist.")
-        } finally {
+            addBotMessage("❌ Failed to initiate loading. Please ensure the backend is running.")
             setIsIngesting(false)
         }
     }
@@ -132,7 +136,7 @@ function ChatbotTab({ filesStatus }) {
                 Ask questions about your compliance status, missing requirements, or ISO 11135 clauses.
             </p>
 
-            {!ragIngested ? (
+            {!ragStatus.ready ? (
                 <div className="chatbot-setup" style={{
                     padding: '2rem',
                     background: '#f8f9fa',
@@ -146,10 +150,10 @@ function ChatbotTab({ filesStatus }) {
                         <button
                             className="btn btn-primary"
                             onClick={handleIngestData}
-                            disabled={isIngesting || !dataAvailable}
+                            disabled={isIngesting || !dataAvailable || ragStatus.ready}
                             style={{ marginTop: '1rem', padding: '0.8rem 2rem' }}
                         >
-                            {isIngesting ? '🔍 Loading Knowledge Base...' : '🔄 Load Knowledge Base'}
+                            {isIngesting ? '🔍 Processing Knowledge Base...' : '🔄 Load Knowledge Base'}
                         </button>
                         {!dataAvailable && <p style={{ fontSize: '0.8rem', color: '#d32f2f', marginTop: '0.5rem' }}>Wait for processing to complete</p>}
                     </div>

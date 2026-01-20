@@ -21,6 +21,8 @@ function App() {
   const [selectedFile, setSelectedFile] = useState(null)
   const [fileContent, setFileContent] = useState('')
 
+  const [ragStatus, setRagStatus] = useState({ ready: false, indexed_count: 0 })
+
   const getWsUrl = () => {
     // If API_BASE_URL is relative, use the current window location
     let url = API_BASE_URL;
@@ -46,8 +48,9 @@ function App() {
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
       if (message.type === 'STATUS_UPDATE') {
-        const { llm, pipeline } = message.data;
+        const { llm, pipeline, rag_status } = message.data;
         if (llm) setLlmStatus(llm);
+        if (rag_status) setRagStatus(rag_status);
         if (pipeline) {
           setPipelineCompletion(pipeline);
           // Sync filesStatus from pipeline data
@@ -427,6 +430,7 @@ function App() {
           {mainTab === 'chatbot' && (
             <ChatbotTab
               filesStatus={filesStatus}
+              ragStatus={ragStatus}
             />
           )}
         </main>

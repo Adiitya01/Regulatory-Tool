@@ -54,17 +54,29 @@ class LightweightRAGEngine:
             logger.error(f"Embedding API call failed: {e}")
             return [0.0] * 384
 
+    def get_status(self) -> Dict[str, Any]:
+        """Check if RAG collections have data"""
+        try:
+            standards_count = self.standards_collection.count()
+            evidence_count = self.evidence_collection.count()
+            return {
+                "ready": (standards_count > 0 or evidence_count > 0),
+                "indexed_count": standards_count + evidence_count
+            }
+        except Exception:
+            return {"ready": False, "indexed_count": 0}
+
     def ingest_data(self):
         """Read output files and index them into ChromaDB."""
-        logger.info("🚀 RAG Ingestion Started...")
+        logger.info("🚀 RAG Ingestion Beginning (Background Mode)...")
         
-        logger.info("🔄 Step 1/2: Ingesting Regulatory Standards...")
+        logger.info("🔄 Step 1/2: Processing Regulatory Standards...")
         self._ingest_standard()
         
-        logger.info("🔄 Step 2/2: Ingesting Validation Evidence...")
+        logger.info("🔄 Step 2/2: Processing Validation Evidence...")
         self._ingest_evidence()
         
-        logger.info(f"✅ RAG Ingestion Complete! Total Standards: {self.standards_collection.count()}, Total Evidence: {self.evidence_collection.count()}")
+        logger.info("✅ RAG Knowledge Base indexing finalized.")
 
     def _ingest_standard(self):
         """Ingest the Polished Regulatory Guidance (The Rules)"""
