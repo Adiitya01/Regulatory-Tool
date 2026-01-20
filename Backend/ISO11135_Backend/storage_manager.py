@@ -105,16 +105,29 @@ class StorageManager:
             return str(local_path)
         return None
 
+    _file_list_cache = {}  # {bucket_name: ([files], timestamp)}
+    CACHE_DURATION = 10    # seconds
+
     def exists(self, filename: str) -> bool:
-        """Check if a file exists in the storage provider"""
+        """Check if a file exists in the storage provider with local caching"""
         if self.provider == "supabase" and self.client:
-            try:
-                # list files in bucket
-                files = self.client.storage.from_(self.bucket_name).list()
-                return any(f['name'] == filename for f in files)
-            except Exception as e:
-                logger.error(f"Error checking file existence in Supabase: {e}")
-                return False
+            import time
+            current_time = time.time()
+            
+            # Check if we have a fresh cache for this bucket
+            cached_data = self._file_list_cache.get(self.bucket_name)
+            if cached_data and (current_time - cached_data[1] < self.CACHE_DURATION):
+                files = cached_data[0]
+            else:
+                try:
+                    # Refresh cache
+                    files = self.client.storage.from_(self.bucket_name).list()
+                    self._file_list_cache[self.bucket_name] = (files, current_time)
+                except Exception as e:
+                    logger.error(f"Error listing Supabase bucket: {e}")
+                    return False
+            
+            return any(f['name'] == filename for f in files)
         
         return (config.OUTPUTS_DIR / filename).exists()
 
