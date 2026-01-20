@@ -4,6 +4,8 @@ import axios from 'axios'
 const BASE_URL = import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:8000' : '');
 const API_BASE_URL = (BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL) + '/api';
 
+console.log('Chatbot using API Base URL:', API_BASE_URL);
+
 function ChatbotTab({ filesStatus }) {
     const [messages, setMessages] = useState([])
     const [inputMessage, setInputMessage] = useState('')
@@ -22,6 +24,10 @@ function ChatbotTab({ filesStatus }) {
 
     const polishedExists = filesStatus['polished_regulatory_guidance.txt']?.exists
     const validationExists = filesStatus['validation_report.txt']?.exists
+
+    // Only show "No Data" if we have received at least one status update from the backend
+    // and both files are definitely missing.
+    const hasReceivedStatus = Object.keys(filesStatus).length > 0
     const dataAvailable = polishedExists || validationExists
 
     const handleIngestData = async () => {
@@ -33,7 +39,8 @@ function ChatbotTab({ filesStatus }) {
                 addBotMessage("✅ Knowledge base loaded! I'm ready to answer your questions about ISO 11135 compliance.")
             }
         } catch (error) {
-            addBotMessage("❌ Failed to load knowledge base. Please ensure the backend is running.")
+            console.error('Ingest error:', error);
+            addBotMessage("❌ Failed to load knowledge base. Please ensure the backend is running and the necessary files exist.")
         } finally {
             setIsIngesting(false)
         }
@@ -58,16 +65,11 @@ function ChatbotTab({ filesStatus }) {
         try {
             const response = await axios.post(`${API_BASE_URL}/chat`, {
                 message: textToSend
-            }, {
-                timeout: 60000
             })
-
-            if (response.status === 200) {
-                addBotMessage(response.data.response)
-            }
+            addBotMessage(response.data.response)
         } catch (error) {
-            const errorMsg = error.response?.data?.detail || error.message || 'Failed to get response'
-            addBotMessage(`❌ Error: ${errorMsg}`)
+            console.error('Chat error:', error);
+            addBotMessage("❌ Sorry, I encountered an error processing your question. Please try again.")
         } finally {
             setIsLoading(false)
         }
@@ -87,19 +89,36 @@ function ChatbotTab({ filesStatus }) {
         "Explain the validation requirements"
     ]
 
-    if (!dataAvailable) {
+    if (hasReceivedStatus && !dataAvailable) {
         return (
             <div className="tab-panel">
                 <h2>🤖 Regulatory Consultant Chatbot</h2>
-                <div className="warning" style={{ marginTop: '2rem' }}>
-                    <h3>⚠️ No Data Available</h3>
-                    <p>Please run the pipeline first to generate the necessary files:</p>
-                    <ol style={{ textAlign: 'left', marginTop: '1rem' }}>
-                        <li>Upload and process Guideline PDF</li>
-                        <li>Run LLM Polishing</li>
-                        <li>Upload and process DHF PDF</li>
-                        <li>Generate Validation Report</li>
-                    </ol>
+                <div className="warning-box" style={{
+                    marginTop: '2rem',
+                    padding: '2rem',
+                    background: '#fff9fa',
+                    border: '1px solid #ffccd3',
+                    borderRadius: '12px',
+                    textAlign: 'center'
+                }}>
+                    <h3 style={{ color: '#d32f2f' }}>⚠️ No Data Available</h3>
+                    <p>The chatbot needs processed data to provide answers. Please complete the pipeline first:</p>
+                    <div style={{ maxWidth: '400px', margin: '1.5rem auto', textAlign: 'left' }}>
+                        <ol style={{ lineHeight: '2' }}>
+                            <li style={{ color: filesStatus['guideline_extraction_output.txt']?.exists ? '#2e7d32' : '#666' }}>
+                                {filesStatus['guideline_extraction_output.txt']?.exists ? '✅' : '🔴'} Extract Guideline PDF
+                            </li>
+                            <li style={{ color: polishedExists ? '#2e7d32' : '#666' }}>
+                                {polishedExists ? '✅' : '🔴'} Run LLM Polishing
+                            </li>
+                            <li style={{ color: filesStatus['DHF_Single_Extraction.txt']?.exists ? '#2e7d32' : '#666' }}>
+                                {filesStatus['DHF_Single_Extraction.txt']?.exists ? '✅' : '🔴'} Extract DHF PDF
+                            </li>
+                            <li style={{ color: validationExists ? '#2e7d32' : '#666' }}>
+                                {validationExists ? '✅' : '🔴'} Generate Validation Report
+                            </li>
+                        </ol>
+                    </div>
                 </div>
             </div>
         )
@@ -113,27 +132,34 @@ function ChatbotTab({ filesStatus }) {
             </p>
 
             {!ragIngested ? (
-                <div className="chatbot-setup">
+                <div className="chatbot-setup" style={{
+                    padding: '2rem',
+                    background: '#f8f9fa',
+                    borderRadius: '12px',
+                    border: '1px dashed #dee2e6',
+                    textAlign: 'center'
+                }}>
                     <div className="info-box">
-                        <h3>💡 Load Knowledge Base</h3>
-                        <p>Click the button below to index your validation reports and ISO standards.</p>
+                        <h3>💡 Ready to Consult</h3>
+                        <p>I can analyze your reports and standards to provide expert guidance.</p>
                         <button
                             className="btn btn-primary"
                             onClick={handleIngestData}
-                            disabled={isIngesting}
-                            style={{ marginTop: '1rem' }}
+                            disabled={isIngesting || !dataAvailable}
+                            style={{ marginTop: '1rem', padding: '0.8rem 2rem' }}
                         >
-                            {isIngesting ? 'Loading...' : '🔄 Load Knowledge Base'}
+                            {isIngesting ? '🔍 Loading Knowledge Base...' : '🔄 Load Knowledge Base'}
                         </button>
+                        {!dataAvailable && <p style={{ fontSize: '0.8rem', color: '#d32f2f', marginTop: '0.5rem' }}>Wait for processing to complete</p>}
                     </div>
                 </div>
             ) : (
                 <>
-                    <div className="chat-messages">
+                    <div className="chat-messages" style={{ minHeight: '400px', maxHeight: '500px', overflowY: 'auto', padding: '1rem', background: '#fff', borderRadius: '8px', border: '1px solid #eee' }}>
                         {messages.length === 0 && (
-                            <div className="welcome-message">
-                                <h3>👋 Welcome!</h3>
-                                <p>I'm your ISO 11135 regulatory consultant. Ask me anything about your compliance status!</p>
+                            <div className="welcome-message" style={{ textAlign: 'center', padding: '3rem 1rem', color: '#888' }}>
+                                <h3>👋 How can I help you today?</h3>
+                                <p>You can ask about failures found in the report or specific ISO clauses.</p>
                             </div>
                         )}
 

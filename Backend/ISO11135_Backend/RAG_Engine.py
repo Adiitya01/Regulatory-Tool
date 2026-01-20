@@ -19,18 +19,10 @@ class LightweightRAGEngine:
 
 
     def __init__(self):
-        # 1. Initialize ChromaDB in Ephemeral (Memory) mode
-        import tempfile
-        temp_dir = tempfile.mkdtemp()
+        # 1. Initialize ChromaDB in Ephemeral (Memory) mode for modern 0.4.x+
+        self.chroma_client = chromadb.EphemeralClient()
         
-        self.chroma_client = chromadb.Client(chromadb.config.Settings(
-            chroma_db_impl="duckdb+parquet",
-            chroma_api_impl="local",
-            persist_directory=temp_dir,
-            anonymized_telemetry=False
-        ))
-        
-        # 2. Initialize SentenceTransformer explicitly (Bypassing Chroma internal generic handling)
+        # 2. Initialize SentenceTransformer
         try:
             from sentence_transformers import SentenceTransformer
             self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
@@ -38,8 +30,10 @@ class LightweightRAGEngine:
         except Exception as e:
             logger.error(f"Failed to load SentenceTransformer: {e}")
             self.embedding_model = None
-
-        # 3. Get or Create Collections
+            # Fallback will use zero-vectors which is bad, but at least it won't crash
+            
+        # 3. Create Collections
+        # In modern Chroma, we just create the collections
         self.standards_collection = self.chroma_client.get_or_create_collection(
             name="iso_standards"
         )
@@ -48,7 +42,7 @@ class LightweightRAGEngine:
             name="dhf_evidence"
         )
         
-        logger.info("✅ RAG Engine Initialized (Hugging Face Embeddings + ChromaDB 0.3.x)")
+        logger.info("✅ RAG Engine Initialized (Modern ChromaDB 0.4+)")
 
     def _get_embedding(self, text: str) -> List[float]:
         """Get embedding using local SentenceTransformer"""
