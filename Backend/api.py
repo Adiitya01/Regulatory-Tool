@@ -2,7 +2,7 @@
 FastAPI Backend for DHF Multi-Document Processor
 Provides REST API endpoints for all processing functions
 """
-from fastapi import FastAPI, UploadFile, File, HTTPException, BackgroundTasks
+from fastapi import FastAPI, UploadFile, File, HTTPException, BackgroundTasks, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from pydantic import BaseModel
@@ -15,6 +15,91 @@ import json
 import asyncio
 from datetime import datetime
 import logging
+
+# ... (rest of imports)
+
+# ==================== Real-time Status System ====================
+class StatusWebsocketManager:
+    def __init__(self):
+        self.active_connections: List[WebSocket] = []
+
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+        logger.info(f"🔌 WebSocket Connected. Total: {len(self.active_connections)}")
+
+    def disconnect(self, websocket: WebSocket):
+        if websocket in self.active_connections:
+            self.active_connections.remove(websocket)
+            logger.info(f"🔌 WebSocket Disconnected. Remaining: {len(self.active_connections)}")
+
+    async def broadcast(self, message: dict):
+        for connection in self.active_connections:
+            try:
+                await connection.send_json(message)
+            except Exception:
+                continue
+
+status_manager = StatusWebsocketManager()
+
+# Global App State Cache
+app_state = {
+    "llm": {"connected": False, "message": "Initializing..."},
+    "files": {},
+    "pipeline": None,
+    "last_update": None
+}
+
+async def background_status_monitor():
+    """Always-on background task to monitor system health and storage"""
+    while True:
+        try:
+            # 1. Check LLM
+            connected, msg = test_llm_connection()
+            app_state["llm"] = {
+                "connected": connected,
+                "message": msg,
+                "model": iso11135_config.LLM_MODEL_NAME if connected else None
+            }
+            
+            # 2. Check Pipeline (Trigger logic from existing endpoints)
+            # We fetch this every 30s to keep the UI fresh without polling
+            status_data = await get_pipeline_completion_status()
+            app_state["pipeline"] = status_data
+            
+            app_state["last_update"] = datetime.now().isoformat()
+            
+            # 3. Broadcast to all open WebSockets
+            await status_manager.broadcast({"type": "STATUS_UPDATE", "data": app_state})
+            
+        except Exception as e:
+            logger.error(f"Status Monitor Error: {e}")
+            
+        await asyncio.sleep(30) # Monitor checks every 30s internally
+
+# ==================== Initialize FastAPI app ====================
+app = FastAPI(
+    title="DHF Document Validator API",
+    description="Multi-guideline regulatory compliance document processing system",
+    version="2.0.0"
+)
+
+@app.on_event("startup")
+async def startup_event():
+    # Start the "Always On" monitor
+    asyncio.create_task(background_status_monitor())
+
+@app.websocket("/api/ws/status")
+async def status_websocket_endpoint(websocket: WebSocket):
+    await status_manager.connect(websocket)
+    # Send initial state immediately
+    await websocket.send_json({"type": "STATUS_UPDATE", "data": app_state})
+    try:
+        while True:
+            # Keep connection alive (heartbeat)
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        status_manager.disconnect(websocket)
 
 # Add Backend directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent))
@@ -46,12 +131,7 @@ guidelines_config = load_guidelines_config()
 class ChatRequest(BaseModel):
     message: str
 
-# Initialize FastAPI app
-app = FastAPI(
-    title="DHF Document Validator API",
-    description="Multi-guideline regulatory compliance document processing system",
-    version="2.0.0"
-)
+# ... (app already initialized above with WebSocket support)
 
 # CORS configuration
 app.add_middleware(
