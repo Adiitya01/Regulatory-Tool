@@ -11,6 +11,7 @@ from datetime import datetime
 
 import logging_setup
 from . import config
+from .storage_manager import storage
 
 logger = logging_setup.get_logger(__name__)
 
@@ -228,9 +229,9 @@ def load_raw_extracted_text(preserve_history: bool = False) -> Dict[str, List[st
     target_categories dict unchanged vs previous versions.
     """
     try:
-        extracted_path = Path(EXTRACTED_TEXT_FILE)
-        if not extracted_path.exists():
-            logging.error(f"❌ Extracted text file not found: {EXTRACTED_TEXT_FILE}")
+        extracted_path = storage.ensure_local(EXTRACTED_TEXT_FILE)
+        if not extracted_path:
+            logging.error(f"❌ Extracted text file not found locally or in cloud: {EXTRACTED_TEXT_FILE}")
             return {}
 
         content = extracted_path.read_text(encoding="utf-8")
@@ -387,9 +388,10 @@ def load_raw_extracted_text(preserve_history: bool = False) -> Dict[str, List[st
                 })
 
         # --- Atomic write of mapping log ---
-        outputs_dir = Path("outputs")
+        outputs_dir = config.OUTPUTS_DIR
         outputs_dir.mkdir(parents=True, exist_ok=True)
-        log_file = outputs_dir / "category_mapping_log.json"
+        log_file_name = config.CATEGORY_MAPPING_LOG
+        log_file = outputs_dir / log_file_name
         tmp_file = log_file.with_suffix(".tmp")
         try:
             with tmp_file.open("w", encoding="utf-8") as fh:
@@ -397,23 +399,18 @@ def load_raw_extracted_text(preserve_history: bool = False) -> Dict[str, List[st
                 fh.flush()
                 os.fsync(fh.fileno())
             tmp_file.replace(log_file)
-            # Also write a compatibility copy at the repository root (original behaviour)
-            try:
-                root_log = Path.cwd() / "category_mapping_log.json"
-                with (root_log.with_suffix('.tmp')).open('w', encoding='utf-8') as rf:
-                    json.dump(mapping_log, rf, ensure_ascii=False, indent=2)
-                    rf.flush()
-                    os.fsync(rf.fileno())
-                (root_log.with_suffix('.tmp')).replace(root_log)
-            except Exception:
-                # Non-fatal: log but continue
-                logging.debug("Failed to write root-level category_mapping_log.json (non-fatal)")
+            
+            # Save to Cloud
+            storage.save_file(log_file_name, local_path=log_file)
+
             if preserve_history:
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                backup = outputs_dir / f"category_mapping_log_{timestamp}.json"
+                backup_name = f"category_mapping_log_{timestamp}.json"
+                backup = outputs_dir / backup_name
                 backup.write_text(json.dumps(mapping_log, ensure_ascii=False, indent=2), encoding="utf-8")
+                storage.save_file(backup_name, local_path=backup)
         except Exception as e:  # log but do not raise
-            logging.error(f"Failed to write mapping log atomically: {e}")
+            logging.error(f"Failed to write mapping log: {e}")
 
         # --- Console summary ---
         print("\n10-Category Mapping Results:")

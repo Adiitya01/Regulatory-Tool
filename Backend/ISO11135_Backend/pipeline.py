@@ -17,6 +17,7 @@ from .Guideline_Extractor import extract_pdf_content, extract_parameters_with_co
 from .LLM_Engine import load_raw_extracted_text, polish_all_categories, save_polished_output
 from .DHF_Extractor import extract_single_pdf
 from .validation import EnhancedMultiLayerValidationEngine
+from .storage_manager import storage
 from . import config
 import logging_setup
 
@@ -125,6 +126,8 @@ class DHFPipeline:
                     f"Extracted {len(high_relevance_params)} parameters",
                     config.GUIDELINE_EXTRACTION_OUTPUT
                 )
+                # Save to Cloud
+                storage.save_file(config.GUIDELINE_EXTRACTION_OUTPUT, local_path=output_path)
                 logger.info(f"Guideline extraction completed: {len(high_relevance_params)} parameters")
                 
             except Exception as e:
@@ -167,6 +170,8 @@ class DHFPipeline:
                     "Guideline content polished successfully",
                     config.POLISHED_OUTPUT_FILE
                 )
+                # Save to Cloud
+                storage.save_file(config.POLISHED_OUTPUT_FILE, local_path=output_path)
                 logger.info("LLM polishing completed")
                 
             except Exception as e:
@@ -188,6 +193,8 @@ class DHFPipeline:
                     "DHF extraction completed successfully",
                     config.DHF_EXTRACTION_OUTPUT
                 )
+                # Save to Cloud
+                storage.save_file(config.DHF_EXTRACTION_OUTPUT, local_path=Path(output_file))
                 logger.info("DHF extraction completed")
                 
             except Exception as e:
@@ -224,6 +231,13 @@ class DHFPipeline:
                     f"Validation completed: {len(results)} sections processed, {overall_readiness:.1%} readiness",
                     config.VALIDATION_REPORT
                 )
+                # Save to Cloud
+                storage.save_file(config.VALIDATION_REPORT, local_path=report_path)
+                # Also save the terminal output if it exists
+                term_out = config.OUTPUTS_DIR / config.VALIDATION_TERMINAL_OUTPUT
+                if term_out.exists():
+                    storage.save_file(config.VALIDATION_TERMINAL_OUTPUT, local_path=term_out)
+                    
                 logger.info(f"Validation completed: {len(results)} sections, {overall_readiness:.1%} readiness")
                 
             except Exception as e:

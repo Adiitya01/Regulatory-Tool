@@ -18,6 +18,9 @@ import atexit
 import sys
 
 import logging_setup
+from . import config
+from .storage_manager import storage
+
 logger = logging_setup.get_logger(__name__)
 class Tee:
     def __init__(self, *files):
@@ -488,14 +491,19 @@ def safe_convert_negative_to_positive(content: str, status: ComplianceStatus) ->
     return transformed
 
 
-# --- SETTINGS ---
-LLM_API_BASE = os.getenv("LLM_API_BASE", "http://127.0.0.1:1234")
-LLM_API_URL = os.getenv("LLM_API_URL", f"{LLM_API_BASE}/v1/chat/completions")
-LLM_MODEL_NAME = os.getenv("LLM_MODEL_NAME", "Meta-Llama-3-8B-Instruct-GGUF")
-INPUT_FILE = "DHF_Single_Extraction.txt"
-MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "3"))
-ANALYSIS_LAYERS = 4
-LLM_REQUEST_TIMEOUT = int(os.getenv("LLM_REQUEST_TIMEOUT", "45"))  # Seconds
+# --- SETTINGS FROM CENTRAL CONFIG ---
+LLM_API_BASE = config.LLM_API_BASE
+LLM_API_URL = config.LLM_API_URL
+LLM_MODEL_NAME = config.LLM_MODEL_NAME
+INPUT_FILE = config.DHF_EXTRACTION_OUTPUT
+MAX_RETRIES = config.LLM_MAX_RETRIES
+ANALYSIS_LAYERS = config.ANALYSIS_LAYERS
+LLM_REQUEST_TIMEOUT = config.LLM_REQUEST_TIMEOUT
+LLM_TEMPERATURE = config.LLM_TEMPERATURE
+LLM_TOP_P = config.LLM_TOP_P
+LLM_FREQUENCY_PENALTY = config.LLM_FREQUENCY_PENALTY
+HF_TOKEN = config.HF_TOKEN
+LLM_PROVIDER = config.LLM_PROVIDER
 # Using centralized logging (configured in logging_setup)
 
 @dataclass
@@ -642,13 +650,16 @@ RISK_ANALYSIS:
  """
 
 def load_guideline_sections(filepath: str) -> Dict[str, str]:
-    """Load guideline sections from file with error handling"""
+    """Load guideline sections from file with cloud support"""
     try:
-        if not os.path.exists(filepath):
-            print(f"Warning: {filepath} not found. Using default sections.")
+        # Resolve path using storage manager if possible
+        local_path = storage.ensure_local(filepath)
+        
+        if not local_path:
+            print(f"Warning: {filepath} not found in local or cloud. Using default sections.")
             return create_default_sections()
             
-        with open(filepath, "r", encoding="utf-8") as f:
+        with local_path.open("r", encoding="utf-8") as f:
             text = f.read()
             
         sections = {}
@@ -743,20 +754,22 @@ Requirements: {guideline_section_text[:1000]}
 IMPORTANT: 
 - If something is mentioned but needs more detail, classify as PARTIAL, not MISSING
 - If something is fully documented, classify as PRESENT
-- Only mark as MISSING if completely absent
-
 Provide granular analysis following the exact format specified in the system prompt."""
                     }
                 ],
-                "temperature": 0.05,  # Lower temperature for more consistent classification
+                "temperature": 0.05,
                 "max_tokens": 3000,
                 "seed": seed + layer_id,
-                "top_p": 0.1,  # More focused responses
+                "top_p": 0.1,
                 "frequency_penalty": 0.1,
                 "presence_penalty": 0.1
             }
             
-            response = requests.post(url, json=payload, timeout=LLM_REQUEST_TIMEOUT)
+            headers = {}
+            if LLM_PROVIDER == "hf" and HF_TOKEN:
+                headers["Authorization"] = f"Bearer {HF_TOKEN}"
+            
+            response = requests.post(url, json=payload, headers=headers, timeout=LLM_REQUEST_TIMEOUT)
             
             if response.status_code == 200:
                 result = response.json()["choices"][0]["message"]["content"]
@@ -1348,11 +1361,12 @@ class EnhancedMultiLayerValidationEngine:
             
         # Check if input file exists
         try:
-            if not os.path.exists(file_path):
-                print(f"❌ **Error**: {file_path} not found")
+            local_path = storage.ensure_local(file_path)
+            if not local_path:
+                print(f"❌ **Error**: {file_path} not found in local or cloud storage")
                 return []
                     
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with local_path.open('r', encoding='utf-8') as f:
                 content = f.read()
                     
             if not content.strip():
