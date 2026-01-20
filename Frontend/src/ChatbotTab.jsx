@@ -69,7 +69,8 @@ function ChatbotTab({ filesStatus }) {
             addBotMessage(response.data.response)
         } catch (error) {
             console.error('Chat error:', error);
-            addBotMessage("❌ Sorry, I encountered an error processing your question. Please try again.")
+            const detail = error.response?.data?.detail || "Sorry, I can't reach the AI right now.";
+            addBotMessage(`❌ Error: ${detail}`)
         } finally {
             setIsLoading(false)
         }

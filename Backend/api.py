@@ -816,8 +816,13 @@ async def chat_with_consultant(request: ChatRequest):
         }
             
     except Exception as e:
-        logger.exception(f"Chat Error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        error_type = type(e).__name__
+        logger.error(f"❌ Chat Error [{error_type}]: {str(e)}")
+        # Provide a more helpful message to the UI
+        detail = f"Chat Error ({error_type}): {str(e)}"
+        if "Connection" in str(e):
+            detail = "The AI service is unreachable. Please check LLM_PROVIDER and tokens in Render settings."
+        raise HTTPException(status_code=500, detail=detail)
 
 @app.post("/api/rag/ingest")
 async def trigger_rag_ingestion(background_tasks: BackgroundTasks):
