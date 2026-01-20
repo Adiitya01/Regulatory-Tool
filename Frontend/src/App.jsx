@@ -21,7 +21,20 @@ function App() {
   const [selectedFile, setSelectedFile] = useState(null)
   const [fileContent, setFileContent] = useState('')
 
-  const WS_URL = API_BASE_URL.replace('http', 'ws').replace('/api', '/api/ws/status');
+  const getWsUrl = () => {
+    // If API_BASE_URL is relative, use the current window location
+    let url = API_BASE_URL;
+    if (!url.startsWith('http')) {
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const host = window.location.host;
+      url = `${protocol}//${host}${url}`;
+    } else {
+      url = url.replace('http', 'ws');
+    }
+    return url.replace('/api', '/api/ws/status');
+  };
+
+  const WS_URL = getWsUrl();
 
   useEffect(() => {
     loadGuidelines();
